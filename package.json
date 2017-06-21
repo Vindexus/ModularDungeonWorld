@@ -1,0 +1,28 @@
+{
+  "name": "modulardungeonworld",
+  "version": "0.0.1",
+  "description": "NodeJS project to compile Dungeon World with extra expansions and modules.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "data": "node compilers/data/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vindexus/ModularDungeonWorld.git"
+  },
+  "author": "Colin \"Vindexus\" Kierans",
+  "license": "CC-BY-4.0",
+  "bugs": {
+    "url": "https://github.com/Vindexus/ModularDungeonWorld/issues"
+  },
+  "homepage": "https://github.com/Vindexus/ModularDungeonWorld#readme",
+  "dependencies": {
+    "argparse": "^1.0.9",
+    "colors": "^1.1.2",
+    "dungeonworld-data": "0.0.5"
+  },
+  "devDependencies": {
+    "colors": "^1.1.2"
+  }
+}
