@@ -64,6 +64,13 @@ args.module.forEach((m) => {
 let rawCompiler = dwd.compilers.raw;
 let basicCompiler = dwd.compilers.basic;
 
+//Create a JSON file to hold the information of this distribution
+let distroInfo = {
+  name: args.name,
+  dateCompiled: new Date().toISOString(),
+  modules: []
+}
+
 //Each module gets this compiler and does what they want with it
 //Generally they'll be adding source folders and registering custom steps
 args.module.forEach((m) => {
@@ -73,27 +80,26 @@ args.module.forEach((m) => {
     module = require(m);
   }
   catch(e) {
-    console.log('CAUGHT AN ERROR'.red)
     loaded = false
     m = false;
     if(e.code == 'MODULE_NOT_FOUND') {
-      console.log('ERROR: '.red + ' could not load the module ' + m.red + '. Make you have it installed. Tutorial: ' + 'https://docs.npmjs.com/getting-started/installing-npm-packages-locally'.yellow);
+      console.log('ERROR: '.red + ' could not load the module ' + m.red + '. Make sure you have it installed. Tutorial: ' + 'https://docs.npmjs.com/getting-started/installing-npm-packages-locally'.yellow);
     }
     else {
       console.log(e);
       process.exit();
     }
   }
-  console.log('m', m);
-  console.log('loaded', loaded);
-  console.log('module', module);
   if(module && loaded) {
     const instance = new module();
     console.log('Loading... ' + m.green);
     instance.extendRawCompiler(rawCompiler);
     instance.extendBasicCompiler(basicCompiler);
+    distroInfo.modules.push(m);
   }
 });
+
+fs.writeFileSync(path.join(disDir, args.name + '_info.json'), JSON.stringify(distroInfo, null, 2), 'utf8');
 
 basicCompiler.config.outputFiles = [path.join(disDir, args.name + '_raw.json')];
 basicCompiler.run();
