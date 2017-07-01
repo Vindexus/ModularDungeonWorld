@@ -5,6 +5,8 @@ const pkg                 = require('../../package.json');
 const dwd                 = require('dungeonworld-data');
 const path                = require('path');
 
+const consoleCols = process.stdout.columns;
+
 const parser = new ArgumentParser({
   version: pkg.version,
   addHelp: true,
@@ -50,15 +52,13 @@ if(!args.name) {
   args.name = args.module.join('-');
 }
 
-console.log('Creating a new expansion: ' + args.name.bold + ' with modules: ');
+console.log('='.repeat(consoleCols).bold);
+console.log('Creating a new expansion: ' + args.name.bold + ' with modules: ' + args.module.join(', '));
 
 const disDir = path.join(__dirname, '..', '..', 'distributions', args.name);
 if (!fs.existsSync(disDir)){
-    fs.mkdirSync(disDir);
+  fs.mkdirSync(disDir);
 }
-
-args.module.forEach((m) => {
-});
 
 //Grab the DungeonWorldData compiler
 let rawCompiler = dwd.compilers.raw;
@@ -81,14 +81,14 @@ args.module.forEach((m) => {
   }
   catch(e) {
     loaded = false
-    m = false;
     if(e.code == 'MODULE_NOT_FOUND') {
       console.log('ERROR: '.red + ' could not load the module ' + m.red + '. Make sure you have it installed. Tutorial: ' + 'https://docs.npmjs.com/getting-started/installing-npm-packages-locally'.yellow);
+      m = false;
     }
     else {
       console.log(e);
-      process.exit();
     }
+    process.exit();
   }
   if(module && loaded) {
     const instance = new module();
@@ -101,8 +101,10 @@ args.module.forEach((m) => {
 
 fs.writeFileSync(path.join(disDir, args.name + '_info.json'), JSON.stringify(distroInfo, null, 2), 'utf8');
 
-basicCompiler.config.outputFiles = [path.join(disDir, args.name + '_raw.json')];
-basicCompiler.run();
-
-rawCompiler.config.outputFiles = [path.join(disDir, args.name + '_basic.json')];
+rawCompiler.config.outputFiles = [path.join(disDir, args.name + '_raw.json')];
+rawCompiler.init(rawCompiler.config);
 rawCompiler.run();
+
+basicCompiler.config.outputFiles = [path.join(disDir, args.name + '_basic.json')];
+basicCompiler.init(basicCompiler.config);
+basicCompiler.run();

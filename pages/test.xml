@@ -1,5 +1,6 @@
 <h1>Module Dungeon World Test Page</h1>
 <p>This is just a test page.</p>
+
 <section>Here's the text to {{move 'hack_and_slash'}}: {{moves.hack_and_slash.description}}.</section>
 
 <h2>Classes: {{classes_list.length}}</h2>
@@ -8,6 +9,6 @@
 </ul>
 
 <h2>Alignments for Fighter</h2>
-<ul>{{#each classes.fighter.alignments_list}}<li>Drive: {{name}}</li>
+<ul>{{#each classes.fighter.alignments_list}}<li><strong>{{name}}</strong>: {{description}}</li>
 {{/each}}
 </ul>

@@ -1,0 +1,12 @@
+{{#classes.fighter}}
+<h1>{{name}}</h1>
+
+<h2>Bonds</h2>
+<ul>{{#each bonds}}<li>{{.}}</li>
+{{/each}}
+</ul>
+
+<h2>Names</h2>
+{{#each names}}<p><strong>{{@key}}:</strong> {{#each this}}{{.}} {{/each}}</p>
+{{/each}}
+{{/classes.fighter}}
